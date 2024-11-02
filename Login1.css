@@ -1,0 +1,123 @@
+body{
+    background-color: #f1f1f1;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    background-image:url('https://i.ytimg.com/vi/R9mXtzn8meE/maxresdefault.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.logo{
+    width: 100px;
+    height: 50px;
+    display: block;
+    margin: 0 auto;
+}
+
+.title{
+    color: #262525;
+}
+
+.title2{
+    color: #5473ff;
+}
+
+.Welcome{
+    text-align: center;
+    margin-top: 35px;
+}
+
+.title, .title2{
+    display: inline;
+    text-align: center;
+    line-height: 60px;
+}
+
+.center-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/*Login container*/
+
+.login-container{
+    position: relative;
+    width: 450px;
+    height: 365px;
+    padding: 40px;
+    background-color: #5473ff;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 7px;
+    margin-top: 30px;
+    object-fit: contain;
+}
+
+/*Input fields for the form*/
+
+.login-container p{
+    color: #f1f1f1;
+    font-size: 14px;
+    margin-bottom: 8px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    line-height: 5px;
+}
+
+.login-container .input-group{
+    position: relative;
+    margin-bottom: 20px;
+    line-height: 90px;
+}
+
+.login-container .input-group input{
+    width: 370px;
+    height: 25px;
+    padding: 10px 40px;
+    font-size: 13px;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    border: none;
+    outline: none;
+    border-radius: 7px;
+}
+
+.icon{
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    width: 16px;
+    height: 16px;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon img{
+    width: 16px !important;
+    height: 16px !important;
+    object-fit: contain;
+}
+
+/*Sign-in button*/
+.login-container .btn{
+    width: 50%;
+    display: block;
+    margin: 0 auto;
+    padding: 12px;
+    font-size: 18px;
+    color: #333;
+    background-color: #f1f1f1;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 50px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 13px;
+}
+
+.login-container .btn:hover{
+    background-color: #262525;
+    color: #f1f1f1;
+}
+
