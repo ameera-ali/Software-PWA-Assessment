@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShowCase</title>
+    <script src="browse.js"></script>
+    <link rel="stylesheet" href="browse.css">
+</head>
+<body>
+<!--This is the navigation bar on the side-->
+<div class="sidebar">
+    <img src="logo.png" alt="ShowCase Logo" class="logo">
+    <nav>
+        <ul>
+            <a href="browse.html" class="active">Browse</a><br>
+            <a href="watchlist.html">Watchlist</a><br>
+            <a href="watched.html">Watched</a><br>
+            <a href="watching.html">Watching</a><br>
+        </ul>
+    </nav>
+</div>
+
+<!--The Main Content-->
+
+<div class="main-content">
+
+    <!--searchbar-->
+
+    <div class="search-bar">
+        <div class="search-input-container">
+            <input type="text" id="searchInput" placeholder="Browse to find new shows">
+            <img src="search.png" alt="Search Icon" id="searchIcon" class="search-icon" onclick="searchShows()">
+        </div>
+    </div>
+    
+<!--Show Grid-->
+
+<div class="show-grid" id="showGrid">
+    <div class="show-card" data-title="Hospital Playlist" data-description="A medical drama that dives into the lives of doctors and their friendships">
+        <img src="..." alt="Hospital Playlist">
+        <h3>Hospital Playlist</h3>
+        <p>Medical Drama</p>
+    </div>
+
+    <div class="show-card" data-title="Carmen Sandiago" data-description="Follow the adventures of Carmen Sandiego, a master thief with a heart of gold">
+        <img src="..." alt="Carmen Sandiago">
+        <h3>Carmen Sandiago</h3>
+        <p>Action</p>
+    </div>
+
+    
+</div>
+
+
+</div>
+    
+</body>
+</html>

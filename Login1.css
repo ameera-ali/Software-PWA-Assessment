@@ -98,8 +98,16 @@ body{
     object-fit: contain;
 }
 
+/*error message*/
+.login-container .error{
+    font-size: 13px;
+    display: none;
+    text-align: center;
+    color: #262525;
+}
+
 /*Sign-in button*/
-.login-container .btn{
+.center-container .login-container .btn{
     width: 50%;
     display: block;
     margin: 0 auto;
