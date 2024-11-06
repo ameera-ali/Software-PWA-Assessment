@@ -26,3 +26,6 @@ function closePopup() {
     document.getElementById("popup").style.display = "none";
 }
 
+function redirectToShowcase() {
+    window.location.href = "showcase.html";
+}
