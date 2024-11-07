@@ -8,18 +8,55 @@
 </head>
 <body>
 
-    <!--This is the navigation bar on the side-->
-<div class="sidebar">
-    <img src="logo.png" alt="ShowCase Logo" class="logo">
-    <nav>
-        <ul>
-            <a href="browse.html">Browse</a><br>
-            <a href="showcase.html" class="active">Showcase</a><br>
-            <a href="watched.html">Watched</a><br>
-        </ul>
-    </nav>
-</div>
+    <!-- This is the navigation bar on the side -->
+    <div class="sidebar">
+        <img src="logo.png" alt="ShowCase Logo" class="logo">
+        <nav>
+            <ul>
+                <a href="browse.html">Browse</a><br>
+                <a href="showcase.html" class="active">Showcase</a><br>
+                <a href="watched.html">Watched</a><br>
+            </ul>
+        </nav>
+    </div>
 
-    
+    <!-- Main content section -->
+    <div class="main-content">
+        <div class="Welcome">
+            <h1 class="title">Add To The </h1><h1 class="title2">Collection</h1>
+        </div>
+
+        <div class="center-container">
+            <div id="reviewFormContainer">
+                <form id="reviewForm">
+                    <label for="showTitle">Show Title</label>
+                    <input type="text" id="showTitle" required>
+
+                    <label for="genreSelect">Select Genres:</label>
+                    <select id="genreSelect" name="genreSelect" multiple required>
+                        <option value="Comedy">Comedy</option>
+                        <option value="Drama">Drama</option>
+                        <option value="Romance">Romance</option>
+                        <option value="Thriller">Thriller</option>
+                        <option value="Horror">Horror</option>
+                        <option value="Action">Action</option>
+                        <option value="Sci-Fi">Sci-Fi</option>
+                        <option value="Korean Drama">Korean Drama</option>
+                    </select>
+
+                    <label for="rating">Rating (out of 5):</label>
+                    <input type="number" id="rating" name="rating" min="1" max="5" required>
+
+                    <label for="review">Review</label>
+                    <textarea id="review" name="review" rows="4" required></textarea>
+
+                    <button type="button" onclick="addToWatched()">Add to Watched</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="showcase.js"></script>
+
 </body>
 </html>

@@ -27,5 +27,6 @@ function closePopup() {
 }
 
 function redirectToShowcase() {
+    console.log("Redirecting to showcase...");
     window.location.href = "showcase.html";
 }
