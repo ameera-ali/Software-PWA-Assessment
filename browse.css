@@ -39,11 +39,33 @@ nav ul a.active{
     color: #5473ff;
 }
 
+.Welcome{
+    text-align: center;
+    display: block;
+    margin: auto;
+    white-space: 10px;
+}
+
+.title1, .title2{
+    display: inline;
+    text-align: center;
+    margin-top: 40px;
+    color: #262525;
+}
+
+.title1{
+    color: #333;
+}
+
+.title2 {
+    color: #5473ff;
+}
+
 /*main content*/
 
 .main-content{
     flex: 1;
-    background-color: #f1f1f1;
+    background-color: #fff;
     color: #1e272a;
     padding: 20px;
     overflow-y: auto;
@@ -56,10 +78,11 @@ nav ul a.active{
     flex-wrap: wrap;
     gap: 30px;
     justify-content: center;
+    margin-top: 30px;
 }
 
 .show-card{
-    background-color: #e8e8e8;
+    background-color: #f1f1f1;
     width: 150px;
     padding: 10px;
     border-radius: 10px;
