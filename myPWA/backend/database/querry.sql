@@ -1,1 +1,1 @@
-SELECT * FROM reviewsContainer;
+SELECT * from show_logs;

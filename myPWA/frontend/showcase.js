@@ -46,5 +46,5 @@ function addToWatched() {
     window.location.href = "watched.html"; // Redirect to watched page
 }
 
-// Populate the form with data if editing
+// Fill the form with data if editing
 window.onload = populateForm;

@@ -1,0 +1,12 @@
+frontend/Login1.html
+frontend/Login1.css
+frontend/Login1.js
+frontend/browse.html
+frontend/browse.css
+frontend/browse.js
+frontend/showcase.html
+frontend/showcase.css
+frontend/showcase.js
+frontend/watched.html
+frontend/watched.css
+frontend/watched.js
