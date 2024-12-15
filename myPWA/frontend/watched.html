@@ -26,6 +26,25 @@
     <div class="Welcome">
         <h1 class="title">Here's Your</h1><h1 class="title2">Watched</h1><h1 class="title">Collection</h1>
     </div>
+
+    <!--Genre Filter-->
+
+    <div class="filter">
+        <label for="genreFilter">Filter by Genre:</label>
+        <select id="genreFilter" onchange="filterReviews()">
+        <option value="all">All</option>
+        <option value="Medical Drama">Medical Drama</option>
+        <option value="Action">Action</option>
+        <option value="Comedy">Comedy</option>
+        <option value="Sitcom">Sitcom</option>
+        <option value="Comedy Drama">Comedy Drama</option>
+        <option value="Romance">Romance</option>
+        <option value="Telenovela">Telenovela</option>
+        <option value="Thriller">Thriller</option>
+        <option value="Horror">Horror</option>
+        <option value="Psychological Thriller">Psychological Thriller</option>
+    </select>
+    </div>
     
     <div id="reviewsContainer"></div>
 </div>
