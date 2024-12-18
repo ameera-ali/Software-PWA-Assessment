@@ -1,7 +1,7 @@
 {
     "name": "Showcase",
     "short_name": "Showcase",
-    "start_url": "/showcase/frontend/Login1.html",
+    "start_url": "/myPWA/frontend/Login1.html",
     "display": "standalone",
     "background_color": "#f0f0f0",
     "theme_color": "#393737",

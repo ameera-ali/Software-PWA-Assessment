@@ -1,47 +1,47 @@
 const CACHE_NAME = 'showcase-cache-v1';
 const urlsToCache = [
      '/',
-     '/showcase/frontend/Login1.html',
-     '/showcase/frontend/Login1.css',
+     '/myPWA/frontend/Login1.html',
+     '/myPWA/frontend/Login1.css',
      '/showcase/frontend/Login1.js',
-     '/showcase/frontend/browse.html',
-     '/showcase/frontend/browse.css',
-     '/showcase/frontend/browse.js',
-     '/showcase/frontend/showcase.html',
-     '/showcase/frontend/showcase.css',
-     '/showcase/frontend/showcase.js',
+     '/myPWA/frontend/browse.html',
+     '/myPWA/frontend/browse.css',
+     '/myPWA/frontend/browse.js',
+     '/myPWA/frontend/showcase.html',
+     '/myPWA/frontend/showcase.css',
+     '/myPWA/frontend/showcase.js',
  
-    '/showcase/myPWA/manifest.json',
+    '/myPWA/manifest.json',
     
-    '/showcase/icons/desktop_wide1.png',
-    '/showcase/icons/manifest_icon.png',
-    '/showcase/icons/manifest_icon2.png',
-    '/showcase/icons/mobile_narrow2.png',
+    '/myPWA/icons/desktop_wide1.png',
+    '/myPWA/icons/manifest_icon.png',
+    '/myPWA/icons/manifest_icon2.png',
+    '/myPWA/icons/mobile_narrow2.png',
 
-    '/showcase/frontend/alice.png',
-    '/showcase/frontend/background.png',
-    '/showcase/frontend/bigbangtheory.png',
-    '/showcase/frontend/businessproposal.png',
-    '/showcase/frontend/carmensandiago.png',
-    '/showcase/frontend/friends.png',
-    '/showcase/frontend/gilmoregirls.png',
-    '/showcase/frontend/gossip_girl.png',
-    '/showcase/frontend/hospitalplaylist.png',
-    '/showcase/frontend/jane.png',
-    '/showcase/frontend/logo.png',
-    '/showcase/frontend/logo1.png',
-    '/showcase/frontend/lupin.png',
-    '/showcase/frontend/monsters.png',
-    '/showcase/frontend/office.png',
-    '/showcase/frontend/padlock.png',
-    '/showcase/frontend/rookie.png',
-    '/showcase/frontend/search.png',
-    '/showcase/frontend/strangerthings.png',
-    '/showcase/frontend/titans.png',
-    '/showcase/frontend/unfortunate_events.png',
-    '/showcase/frontend/user.png',
-    '/showcase/frontend/you.png',
-    '/showcase/frontend/youngsheldon.png',
+    '/myPWA/frontend/alice.png',
+    '/myPWA/frontend/background.png',
+    '/myPWA/frontend/bigbangtheory.png',
+    '/myPWA/frontend/businessproposal.png',
+    '/myPWA/frontend/carmensandiago.png',
+    '/myPWA/frontend/friends.png',
+    '/myPWA/frontend/gilmoregirls.png',
+    '/myPWA/frontend/gossip_girl.png',
+    '/myPWA/frontend/hospitalplaylist.png',
+    '/myPWA/frontend/jane.png',
+    '/myPWA/frontend/logo.png',
+    '/myPWA/frontend/logo1.png',
+    '/myPWA/frontend/lupin.png',
+    '/myPWA/frontend/monsters.png',
+    '/myPWA/frontend/office.png',
+    '/myPWA/frontend/padlock.png',
+    '/myPWA/frontend/rookie.png',
+    '/myPWA/frontend/search.png',
+    '/myPWA/frontend/strangerthings.png',
+    '/myPWA/frontend/titans.png',
+    '/myPWA/frontend/unfortunate_events.png',
+    '/myPWA/frontend/user.png',
+    '/myPWA/frontend/you.png',
+    '/myPWA/frontend/youngsheldon.png',
 
 ];
 
@@ -66,7 +66,7 @@ self.addEventListener('fetch', event => {
                 //Return the cached response if found, otherwise fetch from network
                 return response ||
                 fetch(event.request).catch(()=>
-                caches.match('/showcase/frontend/Login1.html')
+                caches.match('/myPWA/frontend/Login1.html')
                 );
             })
     );

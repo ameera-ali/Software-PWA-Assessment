@@ -17,10 +17,16 @@ WHERE id = 2;
 
 UPDATE Shows
 SET rating = '5'
-WHERE id = 1;
+WHERE id = 2;
 
 INSERT INTO Shows(title, genre, rating, review) VALUES
 ('The Office', 'Sitcom', '4', 'Decent show');
 
 SELECT * FROM Shows;
+
+DELETE FROM Shows
+WHERE title = 'Monsters';
+
+
+
 
