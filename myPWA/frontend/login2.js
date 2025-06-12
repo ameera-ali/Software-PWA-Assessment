@@ -1,0 +1,141 @@
+const wrapper = document.querySelector('.wrapper');
+const signUpLink = document.querySelector('.signUp-link');
+const signInLink = document.querySelector('.signIn-link');
+
+signUpLink.addEventListener('click', () => {
+    wrapper.classList.add('animate-signIn');
+    wrapper.classList.remove('animate-signUp');
+});
+
+signInLink.addEventListener('click', () => {
+    wrapper.classList.add('animate-signUp');
+    wrapper.classList.remove('animate-signIn');
+});
+
+// Password visibility toggle and validation
+const passwordInput = document.querySelector(".input-group-pass input");
+const eyeIcon = document.querySelector(".input-group-pass i");
+const requirementList = document.querySelectorAll(".requirement-list li");
+
+const requirements = [
+    { regex: /.{8,}/, index: 0 },
+    { regex: /[0-9]/, index: 1 },
+    { regex: /[a-z]/, index: 2 },
+    { regex: /[^A-Za-z0-9]/, index: 3 },
+    { regex: /[A-Z]/, index: 4 },
+];
+
+passwordInput.addEventListener("keyup", (e) => {
+    requirements.forEach(item => {
+        const isValid = item.regex.test(e.target.value);
+        const requirementItem = requirementList[item.index];
+
+        if (isValid) {
+            requirementItem.firstElementChild.className = "fa-solid fa-check";
+            requirementItem.classList.add("valid");
+        } else {
+            requirementItem.firstElementChild.className = "fa-solid fa-circle";
+            requirementItem.classList.remove("valid");
+        }
+    });
+});
+
+eyeIcon.addEventListener("click", () => {
+    passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+    eyeIcon.className = `fa-solid fa-eye${passwordInput.type === "password" ? "" : "-slash"}`;
+});
+
+// Captcha setup
+let captchaValue = "";
+
+(function () {
+    const fonts = ["cursive", "sans-serif", "serif", "monospace"];
+
+    function generateCaptcha() {
+        let value = btoa(Math.random() * 1000000000).substr(0, 5 + Math.random() * 5);
+        captchaValue = value;
+    }
+
+    function setCaptcha() {
+        let html = captchaValue.split("").map((char) => {
+            const rotate = -20 + Math.trunc(Math.random() * 30);
+            const fontIndex = Math.trunc(Math.random() * fonts.length);
+            return `<span style="transform:rotate(${rotate}deg); font-family:${fonts[fontIndex]};">${char}</span>`;
+        }).join("");
+        document.querySelector(".form-wrapper.sign-up .captcha .preview").innerHTML = html;
+    }
+
+    function initCaptcha() {
+        document.querySelector(".form-wrapper.sign-up .captcha-refresh").addEventListener("click", function () {
+            generateCaptcha();
+            setCaptcha();
+        });
+
+        generateCaptcha();
+        setCaptcha();
+    }
+
+    initCaptcha();
+})();
+
+// Sign Up Logic
+document.querySelector("#btn").addEventListener("click", function () {
+    let username = document.querySelector("#signup-username").value.trim();
+    let password = document.querySelector("#signup-password").value.trim();
+    let inputCaptchaValue = document.querySelector(".form-wrapper.sign-up #captcha-input").value;
+
+    if (inputCaptchaValue !== captchaValue) {
+        swal("Error", "Invalid Captcha", "error");
+        return;
+    }
+
+    if (!username || !password) {
+        swal("Error", "Username and password required", "error");
+        return;
+    }
+
+    localStorage.setItem("user-credentials", JSON.stringify({ username, password }));
+    swal("Success", "Account Created Successfully!", "success");
+});
+
+// Login Attempt Limiting
+let attemptsLeft = 3;
+let lockout = false;
+let lockoutEndTime = 0;
+
+document.querySelector("#login-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const now = Date.now();
+
+    if (lockout && now < lockoutEndTime) {
+        const secondsLeft = Math.ceil((lockoutEndTime - now) / 1000);
+        swal("Locked Out", `Too many attempts. Please wait ${secondsLeft} seconds.`, "warning");
+        return;
+    }
+
+    if (lockout && now >= lockoutEndTime) {
+        // Reset lockout
+        attemptsLeft = 3;
+        lockout = false;
+    }
+
+    const loginUsername = document.querySelector("#login-username").value.trim();
+    const loginPassword = document.querySelector("#login-password").value.trim();
+    const stored = JSON.parse(localStorage.getItem("user-credentials"));
+
+    if (stored && loginUsername === stored.username && loginPassword === stored.password) {
+        attemptsLeft = 3; // Reset on success
+        window.location.href = "browse.html";
+    } else {
+        attemptsLeft--;
+
+        if (attemptsLeft > 0) {
+            swal("Error", `Invalid username or password. ${attemptsLeft} attempt(s) remaining.`, "error");
+        } else {
+            lockout = true;
+            lockoutEndTime = Date.now() + 60000; // 60 seconds
+            swal("Locked Out", "Too many failed attempts. Please wait 1 minute before trying again.", "error");
+        }
+    }
+});
