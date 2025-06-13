@@ -78,8 +78,8 @@ let captchaValue = "";
     initCaptcha();
 })();
 
-// Sign Up Logic
-document.querySelector("#btn").addEventListener("click", function () {
+// Sign Up Logic with Fetch API
+document.querySelector("#btn").addEventListener("click", async function () {
     let username = document.querySelector("#signup-username").value.trim();
     let password = document.querySelector("#signup-password").value.trim();
     let inputCaptchaValue = document.querySelector(".form-wrapper.sign-up #captcha-input").value;
@@ -94,16 +94,31 @@ document.querySelector("#btn").addEventListener("click", function () {
         return;
     }
 
-    localStorage.setItem("user-credentials", JSON.stringify({ username, password }));
-    swal("Success", "Account Created Successfully!", "success");
+    try {
+        const res = await fetch('http://localhost:3000/api/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+
+        if (res.ok) {
+            swal("Success", "Account created!", "success");
+        } else {
+            const msg = await res.text();
+            swal("Error", msg, "error");
+        }
+    } catch (error) {
+        console.error(error);
+        swal("Error", "Network error: " + error.message, "error");
+    }
 });
 
-// Login Attempt Limiting
+// Login Attempt Limiting + Fetch API login
 let attemptsLeft = 3;
 let lockout = false;
 let lockoutEndTime = 0;
 
-document.querySelector("#login-form").addEventListener("submit", function (e) {
+document.querySelector("#login-form").addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const now = Date.now();
@@ -115,27 +130,36 @@ document.querySelector("#login-form").addEventListener("submit", function (e) {
     }
 
     if (lockout && now >= lockoutEndTime) {
-        // Reset lockout
         attemptsLeft = 3;
         lockout = false;
     }
 
     const loginUsername = document.querySelector("#login-username").value.trim();
     const loginPassword = document.querySelector("#login-password").value.trim();
-    const stored = JSON.parse(localStorage.getItem("user-credentials"));
 
-    if (stored && loginUsername === stored.username && loginPassword === stored.password) {
-        attemptsLeft = 3; // Reset on success
-        window.location.href = "browse.html";
-    } else {
-        attemptsLeft--;
+    try {
+        const res = await fetch('http://localhost:3000/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: loginUsername, password: loginPassword })
+        });
 
-        if (attemptsLeft > 0) {
-            swal("Error", `Invalid username or password. ${attemptsLeft} attempt(s) remaining.`, "error");
+        if (res.ok) {
+            attemptsLeft = 3;
+            window.location.href = "browse.html";
         } else {
-            lockout = true;
-            lockoutEndTime = Date.now() + 60000; // 60 seconds
-            swal("Locked Out", "Too many failed attempts. Please wait 1 minute before trying again.", "error");
+            attemptsLeft--;
+            if (attemptsLeft > 0) {
+                const msg = await res.text();
+                swal("Error", `${msg} ${attemptsLeft} attempt(s) remaining.`, "error");
+            } else {
+                lockout = true;
+                lockoutEndTime = Date.now() + 60000;
+                swal("Locked Out", "Too many failed attempts. Please wait 1 minute before trying again.", "error");
+            }
         }
+    } catch (error) {
+        console.error(error);
+        swal("Error", "Network error: " + error.message, "error");
     }
 });
