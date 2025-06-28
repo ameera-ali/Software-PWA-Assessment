@@ -53,10 +53,16 @@ function addShowlogs(event) {
 
     const title = document.getElementById("showTitle").value;
     const genre = document.getElementById("genreSelect").value;
-    const rating = document.getElementById("rating").value;
+    const rating = parseFloat(document.getElementById("rating").value); // Ensure numeric input
     const review = document.getElementById("review").value;
 
-    if (title && genre && rating && review) {
+    // ✅ Rating validation
+    if (isNaN(rating) || rating < 0 || rating > 5) {
+        alert("Please enter a valid rating between 0 and 5.");
+        return;
+    }
+
+    if (title && genre && review) {
         fetch('http://localhost:3000/api/Shows', {
             method: 'POST',
             headers: {
