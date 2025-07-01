@@ -15,6 +15,20 @@ function sanitizeInput(input) {
     return sanitized;
 }
 
+// ✅ Real-time input scrubber (spaces allowed)
+const inputSelectors = ["#showTitle", "#review"];
+const livePatterns = [
+    /('|--|;|=|\/\*|\*\/|#|%|<script.*?>.*?<\/script>|<[^>]*>)/gi
+];
+
+function scrubLiveInput(input) {
+    let value = input.value;
+    livePatterns.forEach(pattern => {
+        value = value.replace(pattern, '[disallowed input]');
+    });
+    input.value = value;
+}
+
 // ✅ Load all reviews from server
 function loadShowlogs() {
     fetch('http://localhost:3000/api/Shows')
@@ -114,18 +128,24 @@ function editShowlogs(id) {
         });
 }
 
-// ✅ Update an existing review
+// ✅ Update an existing review (with rating validation)
 function updateShowlogs(event) {
     event.preventDefault();
 
     let title = document.getElementById('showTitle').value;
     const genre = document.getElementById('genreSelect').value;
-    const rating = document.getElementById('rating').value;
+    const rating = parseFloat(document.getElementById('rating').value);
     let review = document.getElementById('review').value;
 
     // ✅ Sanitise inputs
     title = sanitizeInput(title);
     review = sanitizeInput(review);
+
+    // ✅ Validate rating range
+    if (isNaN(rating) || rating < 0 || rating > 5) {
+        alert("Please enter a valid rating between 0 and 5.");
+        return;
+    }
 
     if (isEditMode && editId !== null) {
         fetch(`http://localhost:3000/api/Shows/${editId}`, {
@@ -176,6 +196,14 @@ document.addEventListener('DOMContentLoaded', () => {
             updateShowlogs(event);
         } else {
             addShowlogs(event);
+        }
+    });
+
+    // ✅ Bind real-time scrubbing to inputs
+    inputSelectors.forEach(selector => {
+        const input = document.querySelector(selector);
+        if (input) {
+            input.addEventListener("input", () => scrubLiveInput(input));
         }
     });
 });
