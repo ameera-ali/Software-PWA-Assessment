@@ -2,14 +2,36 @@ const wrapper = document.querySelector('.wrapper');
 const signUpLink = document.querySelector('.signUp-link');
 const signInLink = document.querySelector('.signIn-link');
 
-signUpLink.addEventListener('click', () => {
+signUpLink.addEventListener('click', (e) => {
+    e.preventDefault();
     wrapper.classList.add('animate-signIn');
     wrapper.classList.remove('animate-signUp');
 });
 
-signInLink.addEventListener('click', () => {
+signInLink.addEventListener('click', (e) => {
+    e.preventDefault();
     wrapper.classList.add('animate-signUp');
     wrapper.classList.remove('animate-signIn');
+});
+
+// Prevent input of spaces and disallowed characters in real-time
+const inputSelectors = ["#signup-username", "#signup-password", "#login-username", "#login-password"];
+const sqlPatterns = [/('|--|;|=|\/\*|\*\/|--|#|%|<script>|<\/script>)/gi];
+
+function scrubInput(input) {
+    let value = input.value;
+    // Strip spaces and trim
+    value = value.replace(/\s+/g, '');
+    // Replace SQLi/malicious patterns
+    sqlPatterns.forEach(pattern => {
+        value = value.replace(pattern, '[disallowed input]');
+    });
+    input.value = value;
+}
+
+inputSelectors.forEach(selector => {
+    const input = document.querySelector(selector);
+    input.addEventListener('input', () => scrubInput(input));
 });
 
 // Password visibility toggle and validation
@@ -78,11 +100,19 @@ let captchaValue = "";
     initCaptcha();
 })();
 
-// Sign Up Logic with Fetch API
+// Extra sanitisation before submission
+function sanitizeInput(input) {
+    return input.replace(/\s+/g, '').replace(/['"\\;%=<>]/g, '').trim();
+}
+
+// Sign Up Logic with sanitisation & validation
 document.querySelector("#btn").addEventListener("click", async function () {
-    let username = document.querySelector("#signup-username").value.trim();
-    let password = document.querySelector("#signup-password").value.trim();
+    let usernameRaw = document.querySelector("#signup-username").value;
+    let passwordRaw = document.querySelector("#signup-password").value;
     let inputCaptchaValue = document.querySelector(".form-wrapper.sign-up #captcha-input").value;
+
+    const username = sanitizeInput(usernameRaw);
+    const password = sanitizeInput(passwordRaw);
 
     if (inputCaptchaValue !== captchaValue) {
         swal("Error", "Invalid Captcha", "error");
@@ -91,6 +121,13 @@ document.querySelector("#btn").addEventListener("click", async function () {
 
     if (!username || !password) {
         swal("Error", "Username and password required", "error");
+        return;
+    }
+
+    // Password validation check before sending to backend
+    const failedRequirements = requirements.filter(req => !req.regex.test(passwordRaw));
+    if (failedRequirements.length > 0) {
+        swal("Error", "Password does not meet all requirements", "error");
         return;
     }
 
@@ -113,7 +150,7 @@ document.querySelector("#btn").addEventListener("click", async function () {
     }
 });
 
-// Login Attempt Limiting + Fetch API login
+// Login Attempt Limiting + Fetch API login with sanitisation
 let attemptsLeft = 3;
 let lockout = false;
 let lockoutEndTime = 0;
@@ -134,8 +171,11 @@ document.querySelector("#login-form").addEventListener("submit", async function 
         lockout = false;
     }
 
-    const loginUsername = document.querySelector("#login-username").value.trim();
-    const loginPassword = document.querySelector("#login-password").value.trim();
+    let loginUsernameRaw = document.querySelector("#login-username").value;
+    let loginPasswordRaw = document.querySelector("#login-password").value;
+
+    const loginUsername = sanitizeInput(loginUsernameRaw);
+    const loginPassword = sanitizeInput(loginPasswordRaw);
 
     try {
         const res = await fetch('http://localhost:3000/api/login', {

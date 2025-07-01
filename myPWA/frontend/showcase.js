@@ -2,12 +2,25 @@ let isEditMode = false; // Track if in edit mode
 let editId = null; // Track the ID of the review being edited
 let allReviews = []; // Store all reviews for filtering
 
-// Function to load reviews from the backend
+// ✅ Sanitize input to remove SQL injections and HTML tags
+function sanitizeInput(input) {
+    const patterns = [
+        /('|--|;|\/\*|\*\/|=|<script.*?>.*?<\/script>|<[^>]*>| OR | AND )/gi,
+        /\s{2,}/g
+    ];
+    let sanitized = input.trim();
+    for (let pattern of patterns) {
+        sanitized = sanitized.replace(pattern, '[disallowed input]');
+    }
+    return sanitized;
+}
+
+// ✅ Load all reviews from server
 function loadShowlogs() {
     fetch('http://localhost:3000/api/Shows')
         .then(response => response.json())
         .then(data => {
-            allReviews = data; // Save all reviews for filtering
+            allReviews = data;
             displayReviews(allReviews);
         })
         .catch(error => {
@@ -15,10 +28,10 @@ function loadShowlogs() {
         });
 }
 
-// Function to display reviews in the DOM
+// ✅ Render reviews to the DOM
 function displayReviews(reviews) {
     const reviewsList = document.getElementById('reviewsList');
-    reviewsList.innerHTML = ''; // Clear existing reviews
+    reviewsList.innerHTML = '';
 
     reviews.forEach(review => {
         const reviewCard = document.createElement('div');
@@ -35,28 +48,30 @@ function displayReviews(reviews) {
     });
 }
 
-// Function to filter reviews by genre
+// ✅ Filter reviews by genre
 function filterReviews() {
     const selectedGenre = document.getElementById('filterGenre').value;
-
     if (selectedGenre === 'all') {
-        displayReviews(allReviews); // Show all reviews if "All Genres" is selected
+        displayReviews(allReviews);
     } else {
-        const filteredReviews = allReviews.filter(review => review.genre === selectedGenre);
-        displayReviews(filteredReviews);
+        const filtered = allReviews.filter(review => review.genre === selectedGenre);
+        displayReviews(filtered);
     }
 }
 
-// Function to add a new review
+// ✅ Add a new review
 function addShowlogs(event) {
     event.preventDefault();
 
-    const title = document.getElementById("showTitle").value;
+    let title = document.getElementById("showTitle").value;
     const genre = document.getElementById("genreSelect").value;
-    const rating = parseFloat(document.getElementById("rating").value); // Ensure numeric input
-    const review = document.getElementById("review").value;
+    const rating = parseFloat(document.getElementById("rating").value);
+    let review = document.getElementById("review").value;
 
-    // ✅ Rating validation
+    // ✅ Sanitise inputs
+    title = sanitizeInput(title);
+    review = sanitizeInput(review);
+
     if (isNaN(rating) || rating < 0 || rating > 5) {
         alert("Please enter a valid rating between 0 and 5.");
         return;
@@ -65,14 +80,12 @@ function addShowlogs(event) {
     if (title && genre && review) {
         fetch('http://localhost:3000/api/Shows', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ title, genre, rating, review }),
         })
         .then(() => {
-            loadShowlogs(); // Reload reviews
-            document.getElementById("reviewForm").reset(); // Clear form
+            loadShowlogs();
+            document.getElementById("reviewForm").reset();
         })
         .catch(error => {
             console.error('Error adding review:', error);
@@ -82,7 +95,7 @@ function addShowlogs(event) {
     }
 }
 
-// Function to edit a review
+// ✅ Edit a review (prefill form)
 function editShowlogs(id) {
     fetch(`http://localhost:3000/api/Shows/${id}`)
         .then(response => response.json())
@@ -101,21 +114,23 @@ function editShowlogs(id) {
         });
 }
 
-// Function to update an existing review
+// ✅ Update an existing review
 function updateShowlogs(event) {
     event.preventDefault();
 
-    const title = document.getElementById('showTitle').value;
+    let title = document.getElementById('showTitle').value;
     const genre = document.getElementById('genreSelect').value;
     const rating = document.getElementById('rating').value;
-    const review = document.getElementById('review').value;
+    let review = document.getElementById('review').value;
+
+    // ✅ Sanitise inputs
+    title = sanitizeInput(title);
+    review = sanitizeInput(review);
 
     if (isEditMode && editId !== null) {
         fetch(`http://localhost:3000/api/Shows/${editId}`, {
             method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ title, genre, rating, review }),
         })
         .then(() => {
@@ -128,7 +143,7 @@ function updateShowlogs(event) {
     }
 }
 
-// Function to delete a review
+// ✅ Delete a review
 function deleteShowlogs(id) {
     if (confirm('Are you sure you want to delete this review?')) {
         fetch(`http://localhost:3000/api/Shows/${id}`, {
@@ -143,7 +158,7 @@ function deleteShowlogs(id) {
     }
 }
 
-// Reset to "Add" mode
+// ✅ Reset to default Add Mode
 function switchToAddMode() {
     isEditMode = false;
     editId = null;
@@ -151,9 +166,16 @@ function switchToAddMode() {
     document.getElementById('reviewForm').reset();
 }
 
-// Event listener for form submission and filter selection
+// ✅ Initial event bindings
 document.addEventListener('DOMContentLoaded', () => {
     loadShowlogs();
     document.getElementById('filterGenre').addEventListener('change', filterReviews);
-    document.querySelector('button[type="button"]').onclick = isEditMode ? updateShowlogs : addShowlogs;
+
+    document.querySelector('button[type="button"]').addEventListener('click', function (event) {
+        if (isEditMode) {
+            updateShowlogs(event);
+        } else {
+            addShowlogs(event);
+        }
+    });
 });
